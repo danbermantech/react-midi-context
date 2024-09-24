@@ -1,0 +1,140 @@
+import { Canvas, Meta } from '@storybook/blocks';
+import * as MIDIProvider from './Examples.stories';
+ 
+# Examples
+
+<Meta of={MIDIProvider} />
+
+## Device List 
+
+This example shows a list of all available MIDI devices. 
+
+
+### Source
+
+```tsx
+
+const List = ()=>{
+  const inputs = useMIDIContext(cv=>cv.midiInputs);
+  const outputs = useMIDIContext(cv=>cv.midiOutputs);
+  return (
+    <div>
+      <h2>Inputs</h2>
+      <ul>
+        {inputs.map((input, i)=>(
+          <li key={i}>{input.name}</li>
+        ))}
+      </ul>
+        <h2>Outputs</h2>
+        <ul>
+        {outputs.map((output, i)=>(
+          <li key={i}>{output.name}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+```
+
+<Canvas of={MIDIProvider.Devices} />
+
+## Sending a Control Change (CC) Message
+
+This example shows how to send a MIDI Control Change message to a MIDI output.
+
+```tsx
+const SendCC = () =>{
+  const sendMIDICC = useMIDIContext(cv=>cv.sendMIDICC);
+  const midiOutputs = useMIDIContext(cv=>cv.midiOutputs);
+  const device = Object.values(midiOutputs)[0]
+  const [value, setValue] = useState(0);
+  if (!device) return <>No device found, sorry</>
+  return (
+    <label style={{display:'flex', flexFlow:'column', width:'max-content', maxWidth:'100%'}}>
+      <br/>
+      Current value: {value}
+    <input type="range" min="0" max="127" value={value} onChange={(e)=>{
+      sendMIDICC({channel:0, cc:0, value:parseInt(e.currentTarget.value), device})
+      setValue(parseInt(e.currentTarget.value))
+      }}/>
+    </label>
+  )
+}
+```
+
+<Canvas of={MIDIProvider.SendCCStory} />
+
+## Sending Note On and Off
+
+This example shows how to send a MIDI Note On and Note Off message to a MIDI output.
+
+```tsx
+const SendNote = () => {
+  const sendMIDINoteOn = useMIDIContext((cv) => cv.sendMIDINoteOn)
+  const sendMIDINoteOff = useMIDIContext((cv) => cv.sendMIDINoteOff)
+  const midiOutputs = useMIDIContext((cv) => cv.midiOutputs)
+  const device = Object.values(midiOutputs)[0]
+
+  if (!device) return <>No device found, sorry</>
+
+  return (
+    <div style={{ display: 'flex', flexFlow: 'column' }}>
+      <div>
+        <button onPointerDown={() => sendMIDINoteOn({ channel: 0, pitch: 60, value: 127, device })}>
+          Send Note On message
+        </button>
+        <button onPointerDown={() => sendMIDINoteOff({ channel: 0, pitch: 60, device })}>
+          Send Note Off message
+        </button>
+      </div>
+    </div>
+  )
+}
+```
+
+<Canvas of={MIDIProvider.SendNoteStory} />
+
+## Receiving MIDI Messages
+
+This example shows how to receive MIDI messages from a MIDI input.
+Press "enable" to start receiving messages from the first MIDI input.
+Press "disable" to stop receiving messages and close the device.
+
+```tsx
+const ViewIncomingMessages = () => {
+  const addMIDIInput = useMIDIContext((cv) => cv.addMIDIInput)
+  const removeMIDIInput = useMIDIContext((cv) => cv.removeMIDIInput)
+  const midiInputs = useMIDIContext((cv) => cv.midiInputs)
+  const [messages, setMessages] = useState<MessageObject[]>([])
+  const [mostRecent, setMostRecent] = useState('')
+  return (
+    <>
+      <button
+        onClick={() => {
+          addMIDIInput(midiInputs[0], (message: MessageObject) => {
+            // setMostRecent(prev=>prev+JSON.stringify(Object.values(message)))
+            setMessages((prev) => [message, ...prev])
+          })
+        }}
+      >
+        Enable "{midiInputs[0]?.name}"
+      </button>
+      <button onClick={() => {removeMIDIInput(midiInputs[0])}}>
+        Disable "{midiInputs[0]?.name}"
+      </button>
+      <button onClick={() => { setMessages([]) }}>
+        Clear messages
+      </button>
+      <div>{mostRecent}</div>
+      <ul style={{ height: '20rem', overflow: 'auto' }}>
+        {messages.map((message, i) => (
+          <li key={i}>{JSON.stringify(message)}</li>
+        ))}
+      </ul>
+    </>
+  )
+}
+```
+
+<Canvas of={MIDIProvider.ViewIncomingMessagesStory} />

@@ -26,7 +26,6 @@ const app = async (): Promise<UserConfigExport> => {
         // entry: path.resolve(__dirname, 'src/lib/index.ts'),
         entry: {
           main: path.resolve(__dirname, 'src/lib/index.ts'),
-          components: path.resolve(__dirname, 'src/lib/components/index.ts'), // Add components
           hooks: path.resolve(__dirname, 'src/lib/hooks/index.ts'), // Add hooks
         },
         name: formattedName,

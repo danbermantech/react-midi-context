@@ -16,7 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx"],
+  "include": ["./src/lib/**/*.ts", "./src/lib/**/*.tsx", "src/lib/MIDIContext/MIDIProvider.stories.tsx_"],
   "exclude": [
     "./src/**/*.stories.*",
     "./src/templates",

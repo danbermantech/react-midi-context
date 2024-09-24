@@ -1,58 +1,95 @@
-# 🎇PACKAGE_NAME
+# 🎇react-midi-context
 
 {DESCRIPTION GOES HERE}
 
-![sizeMin](https://img.shields.io/bundlephobia/min/PACKAGE_NAME)
-![sizeMinZip](https://img.shields.io/bundlephobia/minzip/PACKAGE_NAME)
-![languages](https://img.shields.io/github/languages/top/danbermantech/PACKAGE_NAME)
-![GitHub package.json version](https://img.shields.io/github/package-json/v/danbermantech/PACKAGE_NAME)
-![NPM License](https://img.shields.io/npm/l/PACKAGE_NAME)
+![sizeMin](https://img.shields.io/bundlephobia/min/react-midi-context)
+![sizeMinZip](https://img.shields.io/bundlephobia/minzip/react-midi-context)
+![languages](https://img.shields.io/github/languages/top/danbermantech/react-midi-context)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/danbermantech/react-midi-context)
+![NPM License](https://img.shields.io/npm/l/react-midi-context)
 
 ## Features
 
 - **TypeScript Support**: Includes TypeScript definitions for a smoother development experience.
-- **Storybook Integration**: Automatically generates Storybook stories for visual testing and documentation.
-- **Public Storybook**: Explore and interact with the components live at [PACKAGE_NAME.danberman.dev](https://PACKAGE_NAME.danberman.dev).
+- **Public Storybook**: Explore and interact with the components live at [react-midi-context.danberman.dev](https://react-midi-context.danberman.dev).
 
 ## Installation
 
-To install `PACKAGE_NAME`, use npm, Yarn, or pnpm:
+To install `react-midi-context`, use npm, Yarn, or pnpm:
 
 ```bash
-npm install PACKAGE_NAME
+npm install react-midi-context
 ```
 
 or with Yarn:
 
 ```bash
-yarn add PACKAGE_NAME
+yarn add react-midi-context
 ```
 
 or with pnpm:
 
 ```bash
-pnpm add PACKAGE_NAME
+pnpm add react-midi-context
 ```
+
+If you're using TypeScript you may also want to install `@types/webmidi` as a dev dependency
 
 ## Usage
 
-### Importing Components
-
-You can import pre-built React components for HTML and SVG tags from `PACKAGE_NAME/components`:
+### Wrap your app in the `MIDIProvider`
 
 #### Example
 
-```jsx
-const MyComponent = () => <>EXAMPLE</>
+```tsx
+import { MIDIProvider } from 'react-midi-context'
+import { App } from './app'
+export const WrappedApp = () => {
+  return (
+    <MIDIProvider onError={console.error}>
+      <App />
+    </MIDIProvider>
+  )
+}
+```
+
+### Then use the hookes provided in your components
+
+#### Example
+
+```tsx
+const SendCCRange = () => {
+  const sendMIDICC = useMIDIContext((cv) => cv.sendMIDICC)
+  const midiOutputs = useMIDIContext((cv) => cv.midiOutputs)
+  const device = Object.values(midiOutputs)[0]
+  const [value, setValue] = useState(0)
+  if (!device) return <>No device found, sorry</>
+  return (
+    <label style={{ display: 'flex', flexFlow: 'column', width: 'max-content', maxWidth: '100%' }}>
+      <br />
+      Current value: {value}
+      <input
+        type="range"
+        min="0"
+        max="127"
+        value={value}
+        onChange={(e) => {
+          sendMIDICC({ channel: 0, cc: 0, value: parseInt(e.currentTarget.value), device })
+          setValue(parseInt(e.currentTarget.value))
+        }}
+      />
+    </label>
+  )
+}
 ```
 
 ## Public Storybook
 
-Explore and interact with the `PACKAGE_NAME` components in our publicly available Storybook at [PACKAGE_NAME.danberman.dev](https://PACKAGE_NAME.danberman.dev). This is a great way to see the components in action and understand how different styles and props affect their appearance.
+Explore and interact with the `react-midi-context` components in our publicly available Storybook at [react-midi-context.danberman.dev](https://react-midi-context.danberman.dev). This is a great way to see the components in action and understand how different styles and props affect their appearance.
 
 ## Contributing
 
-To contribute to `PACKAGE_NAME`:
+To contribute to `react-midi-context`:
 
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature/your-feature`).
@@ -63,10 +100,10 @@ To contribute to `PACKAGE_NAME`:
 
 ## License
 
-`PACKAGE_NAME` is licensed under the ISC License. See the [LICENSE](LICENSE) file for more details.
+`react-midi-context` is licensed under the ISC License. See the [LICENSE](LICENSE) file for more details.
 
 ## Additional Resources
 
-- [GitHub Repository](https://github.com/DanBermanTech/PACKAGE_NAME) – Source code and issue tracking.
+- [GitHub Repository](https://github.com/DanBermanTech/react-midi-context) – Source code and issue tracking.
 
-Thank you for choosing `PACKAGE_NAME`!
+Thank you for choosing `react-midi-context`!

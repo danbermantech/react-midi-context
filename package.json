@@ -1,28 +1,24 @@
 {
-  "name": "vite-library-template",
+  "name": "react-midi-context",
   "private": false,
   "version": "0.0.1",
   "packageManager": "pnpm@8.4.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DanBermanTech/CHANGE_ME"
+    "url": "https://github.com/DanBermanTech/react-midi-context"
   },
   "license": "ISC",
-  "main": "./dist/CHANGE_ME.js",
-  "module": "./dist/CHANGE_ME.js",
+  "main": "./dist/react-midi-context.js",
+  "module": "./dist/react-midi-context.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/cssier.js"
+      "import": "./dist/react-midi-context.js"
     },
     "./hooks": {
       "types": "./dist/hooks/index.d.ts",
       "import": "./dist/hooks/index.js"
-    },
-    "./components": {
-      "types": "./dist/components/index.d.ts",
-      "import": "./dist/components/index.js"
     }
   },
   "engines": {
@@ -30,8 +26,8 @@
   },
   "scripts": {
     "dev": "storybook dev -p 6006",
-    "build": "npm run generate && storybook build && npm run cleanup",
-    "build:lib": "npm run generate && tsc && vite build && npm run cleanup",
+    "build": "storybook build",
+    "build:lib": "tsc && vite build",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx --fix",
     "prettier": "prettier --write \"src/**/*.{ts,tsx,js,mdx}\"",
     "test": "vitest",
@@ -41,8 +37,7 @@
     "prepublishOnly": "npm run build:lib"
   },
   "dependencies": {
-    "react": ">=18.2.0",
-    "react-dom": ">=18.2.0"
+    "use-selektor": "^1.0.2"
   },
   "devDependencies": {
     "@babel/core": "7.22.10",
@@ -59,6 +54,7 @@
     "@types/node": "20.4.9",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
+    "@types/webmidi": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "5.60.0",
     "@vitejs/plugin-react": "4.3.1",
     "@vitest/coverage-v8": "2.1.1",
@@ -78,6 +74,8 @@
     "lint-staged": "13.2.3",
     "prettier": "3.0.1",
     "prop-types": "15.8.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "storybook": "^8.2.9",
     "ts-node": "^10.9.2",
     "typescript": "5.1.6",
@@ -86,8 +84,8 @@
     "vitest": "2.1.1"
   },
   "peerDependencies": {
-    "react": ">=18.2.0",
-    "react-dom": ">=18.2.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "files": [
     "dist"
