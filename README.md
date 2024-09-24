@@ -1,6 +1,8 @@
-# 🎇react-midi-context
+![react-midi-context](https://i.postimg.cc/YkN97Qg4/react-midi-context-2.png)
 
-{DESCRIPTION GOES HERE}
+# react-midi-context
+
+The easiest way to work with MIDI in React
 
 ![sizeMin](https://img.shields.io/bundlephobia/min/react-midi-context)
 ![sizeMinZip](https://img.shields.io/bundlephobia/minzip/react-midi-context)

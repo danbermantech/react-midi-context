@@ -11,6 +11,7 @@
   "main": "./dist/react-midi-context.js",
   "module": "./dist/react-midi-context.js",
   "types": "./dist/index.d.ts",
+  "description": "The best way to access MIDI in React",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -95,5 +96,15 @@
       "prettier -w"
     ]
   },
-  "keywords": []
+  "keywords": [
+    "midi",
+    "react",
+    "webmidi",
+    "hooks",
+    "context",
+    "usemidi",
+    "usewebmidi",
+    "audio",
+    "music"
+  ]
 }
