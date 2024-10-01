@@ -1,5 +1,5 @@
 import { OpenMIDIInputArgs } from '../types'
-import { onMIDIMessage } from './onMIDIMessage'
+import { formatRawMIDIMessage } from './formatRawMIDIMessage'
 import { translateRawMessageToObject } from './translateRawMessageToObject'
 
 export async function openMIDIInput(props: OpenMIDIInputArgs): Promise<WebMidi.MIDIInput | Error> {
@@ -8,7 +8,7 @@ export async function openMIDIInput(props: OpenMIDIInputArgs): Promise<WebMidi.M
   if (input.connection === 'open' && !callback) return input
   if (typeof callback === 'function') {
     const cb = (msg: WebMidi.MIDIMessageEvent) => {
-      const message = onMIDIMessage(msg)
+      const message = formatRawMIDIMessage(msg)
       const translated = translateRawMessageToObject(message.data)
       callback(translated)
     }

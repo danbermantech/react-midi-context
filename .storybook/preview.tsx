@@ -1,5 +1,7 @@
+import React from 'react'
 import type { Preview } from '@storybook/react'
 import theme from './theme'
+import { MIDIProvider } from '../src/lib/MIDIContext/MIDIProvider'
 
 const preview: Preview = {
   parameters: {
@@ -17,6 +19,14 @@ const preview: Preview = {
       },
     },
   },
+  decorators: [
+    (Story) => (
+      <MIDIProvider onError={console.error}>
+        {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
+        <Story />
+      </MIDIProvider>
+    ),
+  ],
 }
 
 export default preview

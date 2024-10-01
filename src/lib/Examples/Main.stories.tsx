@@ -1,14 +1,9 @@
 import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-// import { MIDIProvider } from '.,/MIDIContext/MIDIProvider'
 import { useMIDIContext } from '../hooks/useMIDIContext'
-import { useMemo } from 'react'
-import { Fragment } from 'react'
 import { useState } from 'react'
-import { useEffect } from 'react'
 import { MessageObject } from '../types'
 import { MIDIProvider } from '../MIDIContext/MIDIProvider'
-// import { MidiMessageObject } from '../types';
 
 const List = () => {
   const inputs = useMIDIContext((cv) => cv.midiInputs)

@@ -1,0 +1,79 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks';
+import * as UseMIDIActionsExample from './UseMIDIActionsExample.stories';
+
+<Meta title="useMIDIActions" of={UseMIDIActionsExample} />
+
+<Title />
+
+The useMIDIActions hook can accept a single argument, a `MIDIOutput`
+
+This hook returns an object with four functions:
+- `sendMIDICC` - a function to send a MIDI Control Change message 
+```ts
+(args:{channel:number, cc:number, value:number, device:MIDIOutput})=>void
+```
+- `sendMIDIMessage` - a function to send a MIDI message 
+```tsx
+(args:{channel:number, pitch:number, type:MIDIMessages, value:number, device:MIDIOutput})=>void
+```
+- `sendMIDINoteOn` - a function to send a MIDI Note On message 
+```tsx
+(args:{channel:number, pitch:number, velocity:number, device:MIDIOutput})=>void
+```
+- `sendMIDINoteOff` - a function to send a MIDI Note Off message 
+```tsx
+(args:{channel:number, pitch:number, device:MIDIOutput})=>void
+```
+
+
+When the argument is used, you do not need to include the device in the function payload.
+
+## Usage
+
+### Without Device
+```tsx
+
+const Example = () => {
+    const device = useMIDIContext((cv) => cv.midiOutputs[0])
+    const {sendMIDICC} = useMIDIActions();
+    return (<input 
+    type="range" 
+    min="0" 
+    max="127" 
+    onChange={(ev)=>sendMIDICC({
+        channel:0, 
+        cc:0, 
+        value:parseInt(ev.currentTarget.value),
+        device:device
+    })}
+    >
+    Send MIDI CC</input>)
+}
+```
+
+## With Device
+
+
+```tsx
+const UseMIDIActionsExample = () => {
+    const device = useMIDIContext((cv) => cv.midiOutputs[0])
+    const {
+        sendMIDICC,
+        sendMIDIMessage,
+        sendMIDINoteOn,
+        sendMIDINoteOff,
+    } = useMIDIActions(device);
+
+    return (<>
+        <label htmlFor="ccSlider">Send CC
+            <input type="range" id="ccSlider" name="ccSlider" min="0" max="127" onChange={(e)=>sendMIDICC({channel:1, cc:1, value:parseInt(e.currentTarget.value)})}></input>
+        </label>
+        <label htmlFor="pitchWheel">Send Pitch Wheel
+            <input type="range" id="pitchWheel" name="messageSlider" min="0" max="16383" onChange={(e)=>sendMIDIMessage({channel:1, pitch:1, type:MessageTypes.pitchWheel, velocity:parseInt(e.currentTarget.value)})}></input>
+        </label>
+        <button onClick={()=>sendMIDINoteOn({channel:1, pitch:60, velocity:127})}>Send Note On</button>
+        <button onClick={()=>sendMIDINoteOff({channel:1, pitch:60})}>Send Note Off</button>
+    </>)
+}
+```
+<Canvas of={UseMIDIActionsExample.Primary} />

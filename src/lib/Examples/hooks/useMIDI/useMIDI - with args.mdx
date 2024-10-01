@@ -1,0 +1,27 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks';
+import * as UseMIDIWithArgsExample from './UseMIDIWithArgsExample.stories';
+
+<Title />
+<Meta title="useMIDI" of={UseMIDIWithArgsExample} />
+
+The useMIDI hook can accept a single argument formatted as:
+```tsx
+type UseMIDIArgs = {
+    channel: number,
+    cc: number,
+    device: MIDIOutput
+}
+``` 
+When this argument is provided, it returns a single function that can be used to send a MIDI Control Change message.
+
+## Example
+
+The following example demonstrates using the first MIDI output device to send a MIDI Control Change.
+```tsx
+const UseMIDIWithArgsExample = () => {
+    const device = useMIDIContext((cv) => cv.midiOutputs[0])
+    const send = useMIDI({ channel: 1, cc: 1, device });
+    return (<button onClick={()=>send(127)}>Send MIDI Message</button>)
+}
+```
+<Canvas of={UseMIDIWithArgsExample.WithArgs} />

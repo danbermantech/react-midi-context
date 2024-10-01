@@ -1,27 +1,52 @@
 import React, { useMemo, useReducer, useCallback, useState, useEffect } from 'react'
-import { simpleReducer } from '../utilities/simpleReducer'
-import { openMIDIInput } from '../utilities/openMIDIInput'
-import { closeMIDIInput } from '../utilities/closeMIDIInput'
-import { sendMIDIMessage } from '../utilities/sendMIDIMessage'
-import { MIDIContext } from './MIDIContext'
+// import { useStoreData } from '../src/lib/hooks/useStoreData'
+import { simpleReducer } from '../src/lib/utilities/simpleReducer'
+import { openMIDIInput } from '../src/lib/utilities/openMIDIInput'
+import { closeMIDIInput } from '../src/lib/utilities/closeMIDIInput'
+import { sendMIDIMessage } from '../src/lib/utilities/sendMIDIMessage'
+import { MIDIContext } from '../src/lib/MIDIContext/MIDIContext'
 import {
   SendMIDICCArgs,
   SendMIDINoteOffArgs,
   SendMIDINoteOnArgs,
   MessageTypes,
+  // MIDICommand,
   MIDIContextValue,
+  // OpenMIDIInputArgs,
+  // Recording,
   MessageObject,
-} from '../types'
+} from '../src/lib/types'
 
 export function MIDIProvider(props: { children: React.ReactNode; onError: (err: Error) => void }): JSX.Element {
   const { children, onError } = props
 
+  // const [experimental_recording, experimental_setRecording] = useState<Recording>([])
+  // const [experimental_isRecording, experimental_setIsRecording] = useState<boolean>(false)
   const [connectedMIDIInputs, setConnectedMIDIInputs] = useReducer(simpleReducer<WebMidi.MIDIInput>, [])
   const [connectedMIDIOutputs, setConnectedMIDIOutputs] = useReducer(simpleReducer<WebMidi.MIDIOutput>, [])
+  // const [experimental_savedRecordings, experimental_setSavedRecordings] = useState<Recording[]>([])
 
   const [midiAccess, setMIDIAccess] = useState<WebMidi.MIDIAccess | null>(null)
   const [midiInputs, setMIDIInputs] = useState<WebMidi.MIDIInput[]>([])
   const [midiOutputs, setMIDIOutputs] = useState<WebMidi.MIDIOutput[]>([])
+
+  // const recordMessage = useCallback(
+  //   (command: MIDICommand) => {
+  //     experimental_setRecording((prev: Recording) => [...prev, { command, time: Date.now() }])
+  //   },
+  //   [experimental_setRecording],
+  // )
+
+  // const experimental_startRecording = useCallback(() => {
+  //   experimental_setIsRecording(true)
+  // }, [])
+
+  // const experimental_saveRecording = useCallback(() => {
+  //   experimental_setSavedRecordings((prev: Recording[]) => [...prev, experimental_recording])
+  //   experimental_setRecording([])
+  //   experimental_setIsRecording(false)
+  // }, [experimental_setSavedRecordings, experimental_setRecording, experimental_setIsRecording, experimental_recording])
+  // const { get: experimental_getMIDIValue, set: experimental_setMIDIValue, subscribe:experimental_subscribe } = useStoreData()
 
   useEffect(() => {
     initializeMIDI(onError)
@@ -108,11 +133,25 @@ export function MIDIProvider(props: { children: React.ReactNode; onError: (err: 
           device,
           type: MessageTypes.cc,
         })
+        // experimental_setMIDIValue({
+        //   channel,
+        //   cc,
+        //   value,
+        //   device,
+        // })
+        // if (experimental_isRecording)
+        //   recordMessage({
+        //     channel,
+        //     cc,
+        //     value,
+        //     device,
+        //     type: MessageTypes.cc,
+        //   })
       } catch (error: any) {
         onError(error as Error)
       }
     },
-    [connectedMIDIOutputs, sendMIDIMessage],
+    [connectedMIDIOutputs, sendMIDIMessage /*experimental_isRecording, recordMessage, experimental_setMIDIValue */],
   )
 
   const sendMIDINoteOn = useCallback(
@@ -132,8 +171,17 @@ export function MIDIProvider(props: { children: React.ReactNode; onError: (err: 
         device,
         type: MessageTypes.noteOn,
       })
+
+      // if (experimental_isRecording)
+      //   recordMessage({
+      //     channel,
+      //     pitch,
+      //     value: value ?? velocity,
+      //     device,
+      //     type: MessageTypes.noteOn,
+      //   })
     },
-    [connectedMIDIOutputs, sendMIDIMessage],
+    [connectedMIDIOutputs, sendMIDIMessage /*experimental_isRecording, recordMessage*/],
   )
 
   const sendMIDINoteOff = useCallback(
@@ -151,6 +199,14 @@ export function MIDIProvider(props: { children: React.ReactNode; onError: (err: 
         device,
         type: MessageTypes.noteOff,
       })
+      // if (experimental_isRecording)
+      //   recordMessage({
+      //     channel,
+      //     pitch,
+      //     value: 0,
+      //     device,
+      //     type: MessageTypes.noteOff,
+      //   })
     },
     [connectedMIDIOutputs, sendMIDIMessage],
   )

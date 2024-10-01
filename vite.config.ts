@@ -11,19 +11,20 @@ const app = async (): Promise<UserConfigExport> => {
    * @octocat/library-repo -> library-repo
    * vite-component-library-template -> vite-component-library-template
    */
-  console.log(name)
+  // console.log(name)
   const formattedName = name.match(/[^/]+$/)?.[0] ?? name
-  console.log(formattedName)
+  // console.log(formattedName)
   return defineConfig({
     plugins: [
       react(),
       dts({
         insertTypesEntry: true,
+        exclude: ['src/lib/Examples/**/*'],
       }),
     ],
+
     build: {
       lib: {
-        // entry: path.resolve(__dirname, 'src/lib/index.ts'),
         entry: {
           main: path.resolve(__dirname, 'src/lib/index.ts'),
           hooks: path.resolve(__dirname, 'src/lib/hooks/index.ts'), // Add hooks

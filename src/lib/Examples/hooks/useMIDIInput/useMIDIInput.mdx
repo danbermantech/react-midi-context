@@ -1,0 +1,41 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks';
+import * as UseMIDIInputExample from './UseMIDIInputExample.stories';
+
+<Meta title="useMIDIInput" of={UseMIDIInputExample} />
+
+<Title />
+
+The useMIDIInput hook can accept a single argument, a `number` representing the index of the MIDI input device to use or a `string` representing the name or id of a known device.
+
+This hook returns the requested `WebMIDI.MIDIInput` object or null.
+
+## Example
+
+```tsx
+const UseMIDIInputExample = () => {
+    const device = useMIDIInput(1);
+    const openMIDIInput = useMIDIContext(cv=>cv.openMIDIInput)
+    const [lastMessage, setLastMessage] = useState<MessageObject>()
+
+    useEffect(()=>{
+        if(!device) return
+        if(device.connection === 'closed') openMIDIInput({input:device, callback:(msg)=>{
+                setLastMessage(msg)
+        }});
+        return ()=>{device.onmidimessage = null}
+    },[device, setLastMessage])
+
+    if(!device) return <>No device found, sorry</>
+    return (<>
+    <h1>Device: {device?.name}</h1>
+    <h2>{device?.manufacturer}</h2>
+    <h2>(status: {device?.connection})</h2>
+    <h2>Last Message:</h2>
+    <pre>{JSON.stringify(lastMessage, null, 2)}</pre>
+    </>
+    )
+}
+```
+
+
+<Canvas of={UseMIDIInputExample.Primary} />

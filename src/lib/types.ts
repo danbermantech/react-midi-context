@@ -1,4 +1,3 @@
-import { onMIDIMessage } from './utilities/onMIDIMessage'
 import { openMIDIInput } from './utilities/openMIDIInput'
 import { sendMIDIMessage } from './utilities/sendMIDIMessage'
 
@@ -98,18 +97,9 @@ export interface OpenMIDIInputArgs {
   callback?: (message: MessageObject) => void
 }
 
-// export type MidiMessageObject = {
-//     type: MessageTypes;
-//     channel: number;
-//     cc?: number;
-//     value: number;
-// }
-
 export interface MIDIContextValue {
   initializeMIDI: (onError: (err: Error) => void) => void
   openMIDIInput: typeof openMIDIInput
-  onMIDIMessage: typeof onMIDIMessage
-  getMIDIValue: (args: GetStoreDataArgs) => number
   sendMIDIMessage: typeof sendMIDIMessage
   sendMIDICC: (args: SendMIDICCArgs) => void
   sendMIDINoteOn: (args: SendMIDINoteOnArgs) => void
@@ -121,17 +111,8 @@ export interface MIDIContextValue {
   addMIDIInput: (input: WebMidi.MIDIInput, callback?: (message: MessageObject) => void) => Promise<boolean>
   removeMIDIInput: (input: WebMidi.MIDIInput) => boolean
   connectedMIDIOutputs: WebMidi.MIDIOutput[]
-  setConnectedMIDIOutputs: React.Dispatch<{
-    type: 'add' | 'remove'
-    value: WebMidi.MIDIOutput
-  }>
   addMIDIOutput: (output: WebMidi.MIDIOutput) => boolean
   removeMIDIOutput: (output: WebMidi.MIDIOutput) => boolean
-  subscribe: Function
-  experimental_recording: Recording
-  experimental_startRecording: () => void
-  experimental_isRecording: boolean
-  experimental_savedRecordings: Recording[]
 }
 
 export type Recording = {
