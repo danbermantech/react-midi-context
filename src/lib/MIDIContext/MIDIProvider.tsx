@@ -30,7 +30,10 @@ export function MIDIProvider(props: { children: React.ReactNode; onError: (err: 
   const initializeMIDI = useCallback(async (onError: (err: Error) => void) => {
     try {
       if (!('requestMIDIAccess' in navigator)) throw new Error('MIDI is not supported in this browser.')
-      const tempMidiAccess = await navigator.requestMIDIAccess()
+      const tempMidiAccess = await navigator.requestMIDIAccess({
+        software: true,
+        sysex: true,
+      })
       setMIDIAccess(() => tempMidiAccess)
       setMIDIInputs(() => [...tempMidiAccess.inputs].map((input) => input[1]))
       setMIDIOutputs(() => [...tempMidiAccess.outputs].map((output) => output[1]))
